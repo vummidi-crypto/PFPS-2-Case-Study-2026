@@ -1,0 +1,150 @@
+import numpy as np
+
+# Function to take matrix input
+def input_matrix(rows, cols):
+    print(f"Enter elements for a {rows}x{cols} matrix:")
+    matrix = []
+    for i in range(rows):
+        row = list(map(float, input(f"Row {i+1}: ").split()))
+        matrix.append(row)
+    return matrix
+
+
+# Function to print matrix
+def print_matrix(matrix):
+    for row in matrix:
+        print(row)
+
+
+# Matrix Addition
+def add_matrices(A, B):
+    result = []
+    for i in range(len(A)):
+        row = []
+        for j in range(len(A[0])):
+            row.append(A[i][j] + B[i][j])
+        result.append(row)
+    return result
+
+
+# Matrix Subtraction (NEW)
+def subtract_matrices(A, B):
+    result = []
+    for i in range(len(A)):
+        row = []
+        for j in range(len(A[0])):
+            row.append(A[i][j] - B[i][j])
+        result.append(row)
+    return result
+
+
+# Matrix Multiplication
+def multiply_matrices(A, B):
+    result = []
+    for i in range(len(A)):
+        row = []
+        for j in range(len(B[0])):
+            sum_val = 0
+            for k in range(len(B)):
+                sum_val += A[i][k] * B[k][j]
+            row.append(sum_val)
+        result.append(row)
+    return result
+
+
+# Determinant (2x2 and 3x3)
+def determinant(matrix):
+    n = len(matrix)
+
+    if n == 2:
+        return matrix[0][0]*matrix[1][1] - matrix[0][1]*matrix[1][0]
+
+    elif n == 3:
+        a = matrix
+        return (
+            a[0][0]*(a[1][1]*a[2][2] - a[1][2]*a[2][1])
+            - a[0][1]*(a[1][0]*a[2][2] - a[1][2]*a[2][0])
+            + a[0][2]*(a[1][0]*a[2][1] - a[1][1]*a[2][0])
+        )
+    else:
+        return "Not supported"
+
+
+# Eigenvalues and Eigenvectors (NEW)
+def eigen_values_vectors(matrix):
+    np_matrix = np.array(matrix)
+    values, vectors = np.linalg.eig(np_matrix)
+
+    print("Eigenvalues:")
+    print(values)
+
+    print("\nEigenvectors:")
+    print(vectors)
+
+
+# Main Menu
+while True:
+    print("\nMatrix Calculator")
+    print("1. Addition")
+    print("2. Subtraction")
+    print("3. Multiplication")
+    print("4. Determinant")
+    print("5. Eigenvalues & Eigenvectors")
+    print("6. Exit")
+
+    choice = int(input("Enter your choice: "))
+
+    if choice == 1:
+        r = int(input("Rows: "))
+        c = int(input("Cols: "))
+        A = input_matrix(r, c)
+        B = input_matrix(r, c)
+
+        result = add_matrices(A, B)
+        print("Result:")
+        print_matrix(result)
+
+    elif choice == 2:
+        r = int(input("Rows: "))
+        c = int(input("Cols: "))
+        A = input_matrix(r, c)
+        B = input_matrix(r, c)
+
+        result = subtract_matrices(A, B)
+        print("Result:")
+        print_matrix(result)
+
+    elif choice == 3:
+        r1 = int(input("Rows of A: "))
+        c1 = int(input("Cols of A: "))
+        r2 = int(input("Rows of B: "))
+        c2 = int(input("Cols of B: "))
+
+        if c1 != r2:
+            print("Multiplication not possible!")
+        else:
+            A = input_matrix(r1, c1)
+            B = input_matrix(r2, c2)
+
+            result = multiply_matrices(A, B)
+            print("Result:")
+            print_matrix(result)
+
+    elif choice == 4:
+        n = int(input("Enter size (2 or 3): "))
+        A = input_matrix(n, n)
+
+        print("Determinant =", determinant(A))
+
+    elif choice == 5:
+        n = int(input("Enter size of square matrix: "))
+        A = input_matrix(n, n)
+
+        eigen_values_vectors(A)
+
+    elif choice == 6:
+        print("Exiting...")
+        break
+
+    else:
+        print("Invalid choice")
